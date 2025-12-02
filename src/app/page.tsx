@@ -1,65 +1,180 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import { TicketForm, TicketList } from '@/components/tickets';
+import { Sidebar, ViewType } from '@/components/layout';
+import { Dashboard } from '@/components/dashboard';
+import { Settings } from '@/components/settings';
+import { Help } from '@/components/help';
+import { ThemeProvider } from '@/components/providers';
+import { TicketCategory } from '@/types/ticket';
+
+type ModeType = 'list' | 'submit';
+
+function HomeContent() {
+  const [activeView, setActiveView] = useState<ViewType>('my-tickets');
+  const [mode, setMode] = useState<ModeType>('list');
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [categoryFilter, setCategoryFilter] = useState<TicketCategory | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const handleTicketSubmitted = () => {
+    setMode('list');
+    setRefreshKey((prev) => prev + 1);
+  };
+
+  const handleNewTicket = () => {
+    setMode('submit');
+  };
+
+  const handleViewChange = (view: ViewType) => {
+    setActiveView(view);
+    setMode('list');
+    // Clear category filter when switching views (except when staying on all-tickets)
+    if (view !== 'all-tickets') {
+      setCategoryFilter(null);
+    }
+  };
+
+  const handleCategoryFilter = (category: TicketCategory | null) => {
+    setCategoryFilter(category);
+  };
+
+  const getViewTitle = () => {
+    if (categoryFilter) {
+      const categoryLabels: Record<TicketCategory, string> = {
+        technical: 'Technical',
+        billing: 'Billing',
+        'feature-request': 'Feature Request',
+        general: 'General',
+      };
+      return `${categoryLabels[categoryFilter]} Tickets`;
+    }
+
+    switch (activeView) {
+      case 'inbox':
+        return 'Inbox';
+      case 'my-tickets':
+        return 'My Tickets';
+      case 'all-tickets':
+        return 'All Tickets';
+      case 'dashboard':
+        return 'Dashboard';
+      case 'settings':
+        return 'Settings';
+      case 'help':
+        return 'Help';
+    }
+  };
+
+  const getViewMode = (): 'all' | 'inbox' | 'my-tickets' => {
+    if (activeView === 'inbox') return 'inbox';
+    if (activeView === 'my-tickets') return 'my-tickets';
+    return 'all';
+  };
+
+  const renderMainContent = () => {
+    // Handle form submission mode
+    if (mode === 'submit') {
+      return (
+        <div className="h-full overflow-y-auto">
+          {/* Submit Header */}
+          <div className="sticky top-0 z-10 border-b border-[var(--linear-border)] bg-[var(--linear-bg-primary)] px-6 py-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setMode('list')}
+                className="text-[var(--linear-text-secondary)] hover:text-[var(--linear-text-primary)] transition-colors"
+              >
+                ← Back
+              </button>
+              <h1 className="text-xl font-semibold text-[var(--linear-text-primary)]">
+                New Ticket
+              </h1>
+            </div>
+          </div>
+          {/* Form */}
+          <div className="p-6">
+            <div className="max-w-2xl">
+              <TicketForm onSuccess={handleTicketSubmitted} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Handle special views
+    switch (activeView) {
+      case 'dashboard':
+        return <Dashboard />;
+      case 'settings':
+        return <Settings />;
+      case 'help':
+        return <Help />;
+      default:
+        // Ticket list views (inbox, my-tickets, all-tickets)
+        return (
+          <div className="flex h-full flex-col">
+            {/* Header */}
+            <header className="flex items-center justify-between border-b border-[var(--linear-border)] px-6 py-4">
+              <div className="flex items-center gap-3">
+                <h1 className="text-xl font-semibold text-[var(--linear-text-primary)]">
+                  {getViewTitle()}
+                </h1>
+                {categoryFilter && (
+                  <button
+                    onClick={() => setCategoryFilter(null)}
+                    className="rounded-full bg-[var(--linear-bg-tertiary)] px-2 py-0.5 text-xs text-[var(--linear-text-secondary)] hover:bg-[var(--linear-border-medium)] transition-colors"
+                  >
+                    × Clear filter
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="rounded-md px-3 py-1.5 text-sm text-[var(--linear-text-secondary)] hover:bg-[var(--linear-bg-tertiary)] hover:text-[var(--linear-text-primary)] transition-colors">
+                  Filter
+                </button>
+                <button className="rounded-md px-3 py-1.5 text-sm text-[var(--linear-text-secondary)] hover:bg-[var(--linear-bg-tertiary)] hover:text-[var(--linear-text-primary)] transition-colors">
+                  Display
+                </button>
+              </div>
+            </header>
+
+            {/* Ticket List */}
+            <div className="flex-1 overflow-y-auto">
+              <TicketList
+                key={`${refreshKey}-${categoryFilter || 'all'}-${activeView}`}
+                categoryFilter={categoryFilter}
+                viewMode={getViewMode()}
+              />
+            </div>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-[var(--linear-bg-primary)]">
+      {/* Sidebar */}
+      <Sidebar
+        activeView={activeView}
+        onViewChange={handleViewChange}
+        onNewTicket={handleNewTicket}
+        activeCategory={categoryFilter}
+        onCategoryFilter={handleCategoryFilter}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-hidden">{renderMainContent()}</main>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <ThemeProvider>
+      <HomeContent />
+    </ThemeProvider>
   );
 }
