@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { PanelLeft, PanelLeftClose } from 'lucide-react';
 import { TicketForm, TicketList } from '@/components/tickets';
 import { Sidebar, ViewType } from '@/components/layout';
 import { Dashboard } from '@/components/dashboard';
@@ -117,6 +118,18 @@ function HomeContent() {
             {/* Header */}
             <header className="flex items-center justify-between border-b border-[var(--linear-border)] px-6 py-4">
               <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  className="rounded p-1.5 text-[var(--linear-text-secondary)] hover:bg-[var(--linear-bg-tertiary)] hover:text-[var(--linear-text-primary)] transition-colors"
+                  title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                  aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                >
+                  {sidebarCollapsed ? (
+                    <PanelLeft className="h-5 w-5" />
+                  ) : (
+                    <PanelLeftClose className="h-5 w-5" />
+                  )}
+                </button>
                 <h1 className="text-xl font-semibold text-[var(--linear-text-primary)]">
                   {getViewTitle()}
                 </h1>

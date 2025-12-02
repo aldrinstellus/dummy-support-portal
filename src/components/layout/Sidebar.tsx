@@ -243,23 +243,6 @@ export function Sidebar({
           <HelpCircle className="h-4 w-4 flex-shrink-0" />
           {!isCollapsed && <span>Help</span>}
         </button>
-
-        {/* Collapse Toggle Button */}
-        <button
-          onClick={onToggleCollapse}
-          className={`sidebar-item w-full mt-1 ${isCollapsed ? 'justify-center px-2' : ''}`}
-          title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {isCollapsed ? (
-            <PanelLeft className="h-4 w-4 flex-shrink-0" />
-          ) : (
-            <>
-              <PanelLeftClose className="h-4 w-4 flex-shrink-0" />
-              <span>Collapse</span>
-            </>
-          )}
-        </button>
       </div>
     </aside>
   );
