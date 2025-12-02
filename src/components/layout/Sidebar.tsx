@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/components/providers';
 import { TicketCategory } from '@/types/ticket';
+import { StatusWidget } from '@/components/status';
 
 export type ViewType = 'inbox' | 'my-tickets' | 'all-tickets' | 'dashboard' | 'settings' | 'help';
 
@@ -202,6 +203,20 @@ export function Sidebar({
                 {!isCollapsed && <span>{CATEGORY_LABELS[category]}</span>}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* System Status Section */}
+        <div className="mt-6">
+          {!isCollapsed && (
+            <div className="flex items-center justify-between px-3 py-1">
+              <span className="text-xs font-medium uppercase tracking-wider text-[var(--linear-text-muted)]">
+                System Status
+              </span>
+            </div>
+          )}
+          <div className={`${isCollapsed ? '' : 'mt-1 px-1'}`}>
+            <StatusWidget collapsed={isCollapsed} />
           </div>
         </div>
       </nav>

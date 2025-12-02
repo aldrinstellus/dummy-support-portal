@@ -83,6 +83,29 @@ export async function POST(request: NextRequest) {
     // Add to in-memory storage
     tickets.unshift(newTicket);
 
+    // INTEGRATION: If urgent or contains critical keywords, create incident on Status Page
+    const isUrgent = priority === 'urgent' || aiTriage.suggestedPriority === 'urgent';
+    const hasCriticalKeywords = /down|outage|critical|broken|not working|emergency/i.test(description);
+
+    if (isUrgent || hasCriticalKeywords) {
+      const statusPageUrl = process.env.STATUS_PAGE_URL || 'http://localhost:3023';
+      try {
+        await fetch(`${statusPageUrl}/api/incidents`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: `Customer Report: ${description.slice(0, 50)}${description.length > 50 ? '...' : ''}`,
+            serviceId: mapCategoryToService(category),
+            severity: priority === 'urgent' || aiTriage.suggestedPriority === 'urgent' ? 'critical' : 'major',
+          }),
+        });
+        console.log('[Integration] Created incident on Status Page for urgent ticket');
+      } catch (error) {
+        // Fail silently - don't block ticket creation if Status Page is down
+        console.log('[Integration] Status Page unavailable, skipping incident creation');
+      }
+    }
+
     return NextResponse.json(
       {
         success: true,
@@ -98,6 +121,17 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Map ticket category to Status Page service ID
+function mapCategoryToService(category: string): string {
+  const mapping: Record<string, string> = {
+    technical: 'api',
+    billing: 'web',
+    general: 'web',
+    'feature-request': 'web',
+  };
+  return mapping[category] || 'api';
 }
 
 // Simple AI triage simulation
