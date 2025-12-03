@@ -25,6 +25,28 @@ export function formatDate(dateString: string): string {
   });
 }
 
+// Counter for generating sequential ticket IDs
+let ticketCounter = 8; // Starting after mock data (ticket-001 through ticket-008)
+
+export function generateTicketId(): string {
+  ticketCounter++;
+  return `ticket-${String(ticketCounter).padStart(3, '0')}`;
+}
+
+// Initialize counter based on existing tickets
+export function initTicketCounter(existingTickets: { id: string }[]): void {
+  const maxNum = existingTickets.reduce((max, t) => {
+    const match = t.id.match(/ticket-(\d+)/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      return Math.max(max, num);
+    }
+    return max;
+  }, 0);
+  ticketCounter = maxNum;
+}
+
+// Legacy function kept for compatibility
 export function generateId(): string {
-  return `ticket-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return generateTicketId();
 }

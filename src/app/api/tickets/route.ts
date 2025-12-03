@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getMockTickets, mockTickets } from '@/lib/mock-data';
 import { ticketSchema } from '@/lib/validations/ticket';
-import { generateId } from '@/lib/utils';
+import { generateTicketId, initTicketCounter } from '@/lib/utils';
 import { Ticket } from '@/types/ticket';
 
 // In-memory storage for demo (starts with mock data)
 let tickets: Ticket[] = [...mockTickets];
+
+// Initialize the ticket counter based on existing mock data
+initTicketCounter(mockTickets);
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -66,7 +69,7 @@ export async function POST(request: NextRequest) {
 
     // Create new ticket
     const newTicket: Ticket = {
-      id: generateId(),
+      id: generateTicketId(),
       name,
       email,
       category,
