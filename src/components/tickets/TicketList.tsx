@@ -50,7 +50,7 @@ function InboxHeader({ stats, urgentCount }: { stats: { open: number; inProgress
               <p className="text-sm font-medium text-red-400">
                 {urgentCount} URGENT TICKET{urgentCount > 1 ? 'S' : ''} NEED{urgentCount === 1 ? 'S' : ''} ATTENTION
               </p>
-              <p className="text-xs text-red-400/70">High priority issues awaiting response</p>
+              <p className="text-xs text-red-600 dark:text-red-300">High priority issues awaiting response</p>
             </div>
             <button className="px-3 py-1.5 text-xs font-medium rounded-md bg-red-500/30 text-red-400 hover:bg-red-500/40 transition-colors">
               View Urgent
@@ -63,13 +63,13 @@ function InboxHeader({ stats, urgentCount }: { stats: { open: number; inProgress
       <div className="flex items-center gap-4 px-6 py-3">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20">
           <Circle className="h-2.5 w-2.5 fill-blue-400 text-blue-400" />
-          <span className="text-xs font-medium text-blue-400">Open</span>
-          <span className="text-xs font-bold text-blue-300">{stats.open}</span>
+          <span className="text-xs font-medium text-blue-600 dark:text-blue-300">Open</span>
+          <span className="text-xs font-bold text-blue-600 dark:text-blue-300">{stats.open}</span>
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20">
           <Clock className="h-2.5 w-2.5 text-yellow-400" />
-          <span className="text-xs font-medium text-yellow-400">In Progress</span>
-          <span className="text-xs font-bold text-yellow-300">{stats.inProgress}</span>
+          <span className="text-xs font-medium text-yellow-600 dark:text-yellow-300">In Progress</span>
+          <span className="text-xs font-bold text-yellow-600 dark:text-yellow-300">{stats.inProgress}</span>
         </div>
       </div>
     </div>
@@ -104,8 +104,8 @@ function MyTicketsHeader({ stats }: { stats: { open: number; inProgress: number;
             <Circle className="h-4 w-4 fill-purple-400 text-purple-400" />
           </div>
           <div>
-            <p className="text-lg font-bold text-purple-300">{stats.open}</p>
-            <p className="text-xs text-purple-400/70">Open</p>
+            <p className="text-lg font-bold text-purple-600 dark:text-purple-300">{stats.open}</p>
+            <p className="text-xs text-purple-600 dark:text-purple-300">Open</p>
           </div>
         </div>
         <div className="flex items-center gap-3 p-3 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
@@ -113,8 +113,8 @@ function MyTicketsHeader({ stats }: { stats: { open: number; inProgress: number;
             <Clock className="h-4 w-4 text-indigo-400" />
           </div>
           <div>
-            <p className="text-lg font-bold text-indigo-300">{stats.inProgress}</p>
-            <p className="text-xs text-indigo-400/70">In Progress</p>
+            <p className="text-lg font-bold text-indigo-600 dark:text-indigo-300">{stats.inProgress}</p>
+            <p className="text-xs text-indigo-600 dark:text-indigo-300">In Progress</p>
           </div>
         </div>
         <div className="flex items-center gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
@@ -122,8 +122,8 @@ function MyTicketsHeader({ stats }: { stats: { open: number; inProgress: number;
             <CheckCircle2 className="h-4 w-4 text-green-400" />
           </div>
           <div>
-            <p className="text-lg font-bold text-green-300">{stats.resolved}</p>
-            <p className="text-xs text-green-400/70">Resolved</p>
+            <p className="text-lg font-bold text-green-600 dark:text-green-300">{stats.resolved}</p>
+            <p className="text-xs text-green-600 dark:text-green-300">Resolved</p>
           </div>
         </div>
       </div>
@@ -160,18 +160,18 @@ function AllTicketsHeader({ stats }: { stats: { all: number; open: number; inPro
         </div>
         <div className="flex flex-col items-center p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
           <Circle className="h-4 w-4 fill-blue-400 text-blue-400 mb-1" />
-          <p className="text-xl font-bold text-blue-300">{stats.open}</p>
-          <p className="text-xs text-blue-400/70">Open</p>
+          <p className="text-xl font-bold text-blue-600 dark:text-blue-300">{stats.open}</p>
+          <p className="text-xs text-blue-600 dark:text-blue-300">Open</p>
         </div>
         <div className="flex flex-col items-center p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
           <Clock className="h-4 w-4 text-yellow-400 mb-1" />
-          <p className="text-xl font-bold text-yellow-300">{stats.inProgress}</p>
-          <p className="text-xs text-yellow-400/70">In Progress</p>
+          <p className="text-xl font-bold text-yellow-600 dark:text-yellow-300">{stats.inProgress}</p>
+          <p className="text-xs text-yellow-600 dark:text-yellow-300">In Progress</p>
         </div>
         <div className="flex flex-col items-center p-3 rounded-lg bg-green-500/5 border border-green-500/20">
           <CheckCircle2 className="h-4 w-4 text-green-400 mb-1" />
-          <p className="text-xl font-bold text-green-300">{stats.resolved}</p>
-          <p className="text-xs text-green-400/70">Resolved</p>
+          <p className="text-xl font-bold text-green-600 dark:text-green-300">{stats.resolved}</p>
+          <p className="text-xs text-green-600 dark:text-green-300">Resolved</p>
         </div>
       </div>
 

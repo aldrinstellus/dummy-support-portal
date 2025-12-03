@@ -18,10 +18,10 @@ const STATUS_COLORS = {
 };
 
 const CATEGORY_CONFIG: Record<TicketCategory, { label: string; color: string }> = {
-  technical: { label: 'Technical', color: 'bg-cyan-500/20 text-cyan-400' },
-  billing: { label: 'Billing', color: 'bg-emerald-500/20 text-emerald-400' },
-  'feature-request': { label: 'Feature', color: 'bg-violet-500/20 text-violet-400' },
-  general: { label: 'General', color: 'bg-slate-500/20 text-slate-400' },
+  technical: { label: 'Technical', color: 'bg-cyan-500/20 text-cyan-700 dark:text-cyan-200' },
+  billing: { label: 'Billing', color: 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-200' },
+  'feature-request': { label: 'Feature', color: 'bg-violet-500/20 text-violet-700 dark:text-violet-200' },
+  general: { label: 'General', color: 'bg-slate-500/20 text-slate-700 dark:text-slate-200' },
 };
 
 // View-specific left border accent colors
@@ -125,10 +125,10 @@ export function TicketRow({ ticket, onClick, viewMode = 'all' }: TicketRowProps)
           <div
             className={`rounded px-1.5 py-0.5 text-xs font-medium whitespace-nowrap ${
               ticket.priority === 'urgent'
-                ? 'bg-red-500/20 text-red-400'
+                ? 'bg-red-500/20 text-red-600 dark:text-red-400'
                 : ticket.priority === 'high'
-                ? 'bg-orange-500/20 text-orange-400'
-                : 'bg-blue-500/20 text-blue-400'
+                ? 'bg-orange-500/20 text-orange-600 dark:text-orange-400'
+                : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
             }`}
             aria-label={`Priority: ${priorityConfig.label}`}
           >
@@ -140,12 +140,12 @@ export function TicketRow({ ticket, onClick, viewMode = 'all' }: TicketRowProps)
         <div
           className={`rounded px-1.5 py-0.5 text-xs font-medium whitespace-nowrap ${
             ticket.status === 'open'
-              ? 'bg-blue-500/20 text-blue-400'
+              ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
               : ticket.status === 'in_progress'
-              ? 'bg-yellow-500/20 text-yellow-400'
+              ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400'
               : ticket.status === 'resolved'
-              ? 'bg-green-500/20 text-green-400'
-              : 'bg-gray-500/20 text-gray-400'
+              ? 'bg-green-500/20 text-green-600 dark:text-green-400'
+              : 'bg-gray-500/20 text-gray-600 dark:text-gray-400'
           }`}
           role="status"
           aria-label={`Status: ${statusConfig.label}`}
@@ -164,7 +164,7 @@ export function TicketRow({ ticket, onClick, viewMode = 'all' }: TicketRowProps)
         {/* AI Triage Indicator */}
         {ticket.aiConfidence && ticket.aiConfidence > 0.8 && (
           <div
-            className="rounded bg-purple-500/20 px-1.5 py-0.5 text-xs text-purple-400"
+            className="rounded bg-purple-500/20 px-1.5 py-0.5 text-xs text-purple-600 dark:text-purple-400"
             title={`AI Triage: ${ticket.aiCategory} (${Math.round(ticket.aiConfidence * 100)}% confidence)`}
           >
             AI
